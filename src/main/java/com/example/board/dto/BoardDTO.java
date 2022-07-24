@@ -1,5 +1,7 @@
 package com.example.board.dto;
 
+import com.example.board.entity.Board;
+import com.example.board.entity.Member;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,4 +22,16 @@ public class BoardDTO {
     private LocalDateTime regDate;
     private LocalDateTime modDate;
     private int replyCnt;
+
+    public Board dtoToEntity() {
+        Member member = Member.builder()
+                .email(this.writerEmail)
+                .build();
+        return Board.builder()
+                .bno(this.bno)
+                .title(this.title)
+                .content(this.content)
+                .writer(member)
+                .build();
+    }
 }

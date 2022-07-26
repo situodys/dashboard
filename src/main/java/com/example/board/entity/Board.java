@@ -37,4 +37,12 @@ public class Board extends BaseEntity{
                 .build();
     }
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content=content;
+    }
+
 }

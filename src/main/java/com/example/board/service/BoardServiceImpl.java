@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -64,5 +65,17 @@ public class BoardServiceImpl implements BoardService {
     public void removeWithReplies(Long bno) {
         replyRepository.deleteByBno(bno);
         boardRepository.deleteById(bno);
+    }
+
+    @Override
+    public void modify(BoardDTO boardDTO) {
+        log.info(boardDTO);
+
+        Board board = boardRepository.getReferenceById(boardDTO.getBno());
+
+        board.changeTitle(boardDTO.getTitle());
+        board.changeContent(boardDTO.getContent());
+
+        boardRepository.save(board);
     }
 }

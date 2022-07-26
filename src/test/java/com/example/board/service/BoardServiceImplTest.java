@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,5 +63,26 @@ class BoardServiceImplTest {
         boardService.removeWithReplies(boardId);
         //then
         assertEquals(null,boardService.get(boardId));
+    }
+
+    @Transactional()
+    @Test
+    public void testModify() throws Exception{
+        //give
+        BoardDTO dto = BoardDTO.builder()
+                .bno(1L)
+                .title("modifyTest")
+                .writerName("user123")
+                .content("modifyTest ... content")
+                .build();
+        //when
+        boardService.modify(dto);
+
+        //then
+        BoardDTO boardDTO = boardService.get(1L);
+
+        assertEquals("modifyTest",boardDTO.getTitle());
+        assertEquals("modifyTest ... content",boardDTO.getContent());
+        assertNotEquals("user1@aaa.com",boardDTO.getWriterName());
     }
 }

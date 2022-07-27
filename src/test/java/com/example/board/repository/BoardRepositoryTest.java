@@ -62,6 +62,8 @@ class BoardRepositoryTest {
             board = result.get();
         }
 
+        System.out.println(board);
+
         assertThat(board.getBno()).isEqualTo(50);
         assertThat(board.getWriter().getEmail()).isEqualTo("user50@aaa.com");
     }
@@ -111,5 +113,24 @@ class BoardRepositoryTest {
         Object[] arr = (Object[])result;
         //then
         System.out.println(Arrays.toString(arr));
+    }
+
+    @Test
+    public void testSearchOneBoard() throws Exception{
+        //give
+
+        //when
+
+        //then
+        System.out.println(boardRepository.searchOneBoard(1L));
+    }
+
+    @Test
+    public void testSearchPage() throws Exception{
+        //give
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        //when
+        boardRepository.searchPage("t", "1", pageable);
+        //then
     }
 }

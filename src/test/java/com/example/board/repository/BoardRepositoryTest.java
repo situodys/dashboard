@@ -1,20 +1,20 @@
 package com.example.board.repository;
 
+import com.example.board.dto.BoardListInfoDTO;
+import com.example.board.dto.BoardSearch;
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 
 import static org.assertj.core.api.Assertions.*;
 
 
+import com.example.board.repository.search.SearchRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -28,6 +28,8 @@ import java.util.stream.IntStream;
 class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired
+    private SearchRepository searchRepository;
 
     @Test
     public void insertBoards() throws Exception{
@@ -130,7 +132,27 @@ class BoardRepositoryTest {
         //give
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
         //when
-        boardRepository.searchPage("t", "1", pageable);
+        Page<Object[]> t = boardRepository.searchPage("t", "1", pageable);
         //then
+        for (Object[] objects : t) {
+
+        }
+    }
+    @Test
+    public void newSearch() throws Exception{
+        //give
+        BoardSearch search = BoardSearch.builder()
+                .page(1)
+                .title("1")
+                .build();
+        //when
+
+        PageImpl<BoardListInfoDTO> boardList = searchRepository.getBoardList(search);
+        //then
+        for (BoardListInfoDTO boardListInfoDTO : boardList.getContent()) {
+            System.out.println(boardListInfoDTO);
+        }
+        System.out.println("boardList fetch count = " + boardList.getTotalElements());
+        System.out.println("boardList total pages= " + boardList.getTotalPages());
     }
 }

@@ -38,6 +38,42 @@
             <button type="button" class="btn btn-primary">List</button>
         </a>
 
+
+        <div>
+            <div class="mt-4">
+                <h5><span class="badge bg-secondary replyCount">Reply Count[[${dto.replyCnt}]]</span></h5>
+            </div>
+            <div class="list-group replyList"></div>
+        </div>
+
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                let bno = [[${dto.bno}]];
+                let listGroup = $(".replyList");
+
+
+                function formatTime(str) {
+                    return new Date(str).toLocaleString();
+                }
+
+                function loadJSONData(){
+                    $.getJSON('/replies/board/' + bno, function (arr) {
+                        console.log(arr);
+                        for (const arrElement of arr) {
+                            let div = document.createElement("div");
+                            div.innerText = arr.toString() + formatTime(arr.regDate);
+                            listGroup.appendChild(div);
+                        }
+                    })
+                    listGroup.html();
+                }
+
+                $(".replyCount").click(function(){
+                    loadJSONData();
+                })
+            });
+        </script>
+
     </th:block>
 
 </th:block>
